@@ -12,7 +12,22 @@ public class ValidarDOM {
             factory.setValidating(true);
             factory.setNamespaceAware(true);
 
-            
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder.setErrorHandler(new org.xml.sax.helpers.DefaultHandler() {
+                public void error(SAXException e) throws SAXException {
+                    System.out.println("❌ Error: " + e.getMessage());
+                    throw e;
+                }
+
+                public void fatalError(SAXException e) throws SAXException {
+                    System.out.println("❌ Error fatal: " + e.getMessage());
+                    throw e;
+                }
+
+                public void warning(SAXException e) {
+                    System.out.println("⚠️ Advertencia: " + e.getMessage());
+                }
+            });
 
             Document doc = builder.parse(archivo);
             System.out.println("✅ XML válido con DOM.");
